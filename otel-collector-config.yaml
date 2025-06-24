@@ -7,10 +7,12 @@ receivers:
 exporters:
   logging:
     loglevel: debug
-  jaeger:
+  jaeger_thrift:
     endpoint: jaeger-all-in-one:14250
     tls:
       insecure: true
+  prometheus:
+    endpoint: "0.0.0.0:8889"
 
 processors:
   batch:
@@ -20,4 +22,8 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, jaeger] 
+      exporters: [logging, jaeger_thrift]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, prometheus] 
